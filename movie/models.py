@@ -19,7 +19,7 @@ class Movie(models.Model):
     title = models.CharField(max_length=200)
     summary = models.TextField()
     director = models.ForeignKey(Director, on_delete=models.SET_NULL, null=True)
-    actors = models.ForeignKey(Actor)
+    actors = models.ForeignKey(Actor, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.title
