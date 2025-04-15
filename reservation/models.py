@@ -19,5 +19,3 @@ class Ticket(models.Model):
 
     def __str__(self):
         return f"{self.user.full_name} - {self.movie.title} - {self.seat.seat_number}"
-
-
