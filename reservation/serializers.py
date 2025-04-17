@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from models import Ticket
+from .models import Ticket
 
 class TicketSerializer(serializers.ModelSerializer):
     movie_title = serializers.CharField(source='movie.title', read_only=True)
