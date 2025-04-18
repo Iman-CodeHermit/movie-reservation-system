@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import User
+from django.apps import apps
 
 # Create your models here.
 
@@ -20,9 +21,18 @@ class Movie(models.Model):
     summary = models.TextField()
     director = models.ForeignKey(Director, on_delete=models.SET_NULL, null=True)
     actors = models.ForeignKey(Actor, on_delete=models.SET_NULL, null=True)
+    sold_out = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
+
+    def check_sold_out(self):
+        Seat = apps.get_model('reservation', 'Seat')
+        Ticket = apps.get_model('reservation', 'Ticket')
+        total_seats = Seat.objects.filter(movie=self).count()
+        sold_tickets = Ticket.objects.filter(movie=self, payment_status='paid').count()
+        self.sold_out = sold_tickets >= total_seats
+        self.save()
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

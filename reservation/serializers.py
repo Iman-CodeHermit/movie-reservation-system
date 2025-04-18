@@ -16,8 +16,13 @@ class TicketSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         seat = data['seat']
+        movie = data['movie']
+        if movie.sold_out:
+            raise serializers.ValidationError("movie sold out!")
         if Ticket.objects.filter(seat=seat).exists():
             return serializers.ValidationError('seat already reserved!')
+        if seat.movie != movie:
+            raise serializers.ValidationError('The chair does not belong in this film!')
         return data
 
     def create(self, validated_data):
