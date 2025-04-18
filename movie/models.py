@@ -27,10 +27,10 @@ class Movie(models.Model):
         return self.title
 
     def check_sold_out(self):
-        Seat = apps.get_model('reservation', 'Seat')
-        Ticket = apps.get_model('reservation', 'Ticket')
-        total_seats = Seat.objects.filter(movie=self).count()
-        sold_tickets = Ticket.objects.filter(movie=self, payment_status='paid').count()
+        seat = apps.get_model('reservation', 'Seat')
+        ticket = apps.get_model('reservation', 'Ticket')
+        total_seats = seat.objects.filter(movie=self).count()
+        sold_tickets = ticket.objects.filter(movie=self, payment_status='paid').count()
         self.sold_out = sold_tickets >= total_seats
         self.save()
 
