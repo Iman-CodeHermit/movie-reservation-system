@@ -25,3 +25,19 @@ class CreateCommentView(APIView):
             comment = serializer.save()
             return Response(CommentSerializer(comment).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class LikeMovieView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        try:
+            movie = Movie.objects.get(pk=pk)
+        except Movie.DoesNotExist:
+            return Response({'detail': 'movie not found'}, status=status.HTTP_404_NOT_FOUND)
+        user = request.user
+        if movie.likes.filter(id=user.id).exists():
+            movie.likes.remove(user)
+            return Response({'liked': False}, status=status.HTTP_200_OK)
+        else:
+            movie.likes.add(user)
+            return Response({'liked': True}, status=status.HTTP_200_OK)

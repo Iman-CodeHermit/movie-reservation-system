@@ -22,9 +22,13 @@ class Movie(models.Model):
     director = models.ForeignKey(Director, on_delete=models.SET_NULL, null=True)
     actors = models.ForeignKey(Actor, on_delete=models.SET_NULL, null=True)
     sold_out = models.BooleanField(default=False)
+    likes = models.ManyToManyField(User, related_name='liked_movies', blank=True)
 
     def __str__(self):
         return self.title
+
+    def like_count(self):
+        return self.likes.count()
 
     def check_sold_out(self):
         seat = apps.get_model('reservation', 'Seat')

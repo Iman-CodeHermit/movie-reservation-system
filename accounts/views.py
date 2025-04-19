@@ -1,6 +1,3 @@
-from enum import unique
-
-from django.core.serializers import serialize
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -59,8 +56,8 @@ class UserProfileView(APIView):
     def get(self, request, user_id):
         user = User.objects.get(id=user_id)
         tickets = Ticket.objects.filter(user=user, payment_status='paid')
-        movies = [ticket.movie for ticket in tickets]
-        unique_movie = list(set(movies))
-        serializer = MovieSerializer(unique_movie, user.full_name, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
+        purchased_movies = list(set(ticket.movie for ticket in tickets))
+        liked_movies = user.liked_movies.all()
+        purchased_serializer = MovieSerializer(purchased_movies, many=True, context={'request': request})
+        liked_serializer = MovieSerializer(liked_movies, many=True, context={'request': request})
+        return Response({'full_name': user.full_name, 'purchased_movies': purchased_serializer.data, 'liked_movies': liked_serializer.data, }, status=status.HTTP_200_OK)

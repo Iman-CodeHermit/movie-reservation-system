@@ -31,6 +31,13 @@ class CommentSerializer(serializers.ModelSerializer):
             user = self.context['request'].user
             return Comment.objects.create(user=user, **validated_data)
 
+        def get_like_count(self, obj):
+            return obj.likes.count()
+
+        def get_is_liked(self, obj):
+            user = self.context.get('request').user
+            return user.is_authenticated and obj.likes.filter(id=user.id).exists()
+
 class DirectorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Director
@@ -44,6 +51,8 @@ class ActorSerializer(serializers.ModelSerializer):
 class MovieSerializer(serializers.ModelSerializer):
     director = DirectorSerializer()
     actors = ActorSerializer()
+    like_count = serializers.SerializerMethodField()
+    is_liked = serializers.SerializerMethodField()
 
     class Meta:
         model = Movie
