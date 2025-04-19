@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Comment
+from .models import Comment, Director, Actor, Movie
 from reservation.models import Ticket
 
 
@@ -30,3 +30,21 @@ class CommentSerializer(serializers.ModelSerializer):
         def create(self, validated_data):
             user = self.context['request'].user
             return Comment.objects.create(user=user, **validated_data)
+
+class DirectorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Director
+        fields = ['id', 'name']
+
+class ActorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Actor
+        fields = ['id', 'name']
+
+class MovieSerializer(serializers.ModelSerializer):
+    director = DirectorSerializer()
+    actors = ActorSerializer()
+
+    class Meta:
+        model = Movie
+        fields = ['id', 'title', 'summary', 'director', 'actors', 'sold_out']
