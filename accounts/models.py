@@ -5,6 +5,7 @@ from .managers import UserManager
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
+    username = models.CharField(max_length=250, unique=True)
     phone_number = models.CharField(max_length=11, unique=True)
     full_name = models.CharField(max_length=250)
     is_active = models.BooleanField(default=True)
@@ -17,6 +18,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
 
     @property
     def is_staff(self):
