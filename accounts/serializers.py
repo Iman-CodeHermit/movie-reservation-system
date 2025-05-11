@@ -32,3 +32,7 @@ class UserLoginSerializer(serializers.Serializer):
             raise serializers.ValidationError("شماره تلفن باید 11 رقمی باشد")
 
         return value
+
+class ConfirmResetCodeSerializer(serializers.Serializer):
+    code = serializers.CharField()
+    new_password = serializers.CharField(min_length=6, write_only=True)
