@@ -10,7 +10,7 @@ class ReservationTicketView(APIView):
     permission_classes = [IsAuthenticated,]
 
     def post(self, request):
-        serializer = TicketSerializer(data=request.data, ccontext={'request':request})
+        serializer = TicketSerializer(data=request.data, context={'request':request})
         if serializer.is_valid():
             ticket = serializer.save()
             return Response(TicketSerializer(ticket).data, status=status.HTTP_201_CREATED)

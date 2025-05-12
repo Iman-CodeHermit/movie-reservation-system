@@ -56,4 +56,15 @@ class MovieSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Movie
-        fields = ['id', 'title', 'summary', 'director', 'actors', 'sold_out']
+        fields = ['id', 'title', 'summary', 'director', 'actors', 'sold_out', 'like_count', 'is_liked']
+
+    def get_like_count(self, obj):
+        return obj.likes.count()
+
+    def get_is_liked(self, obj):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            return obj.likes.filter(id=request.user.id).exists()
+        return False
+
+

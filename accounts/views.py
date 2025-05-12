@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from .models import User, PasswordResetCode
-from .serializers import UserRegiterSerializer, UserLoginSerializer, ConfirmResetCodeSerializer
+from .serializers import UserRegisterSerializer, UserLoginSerializer, ConfirmResetCodeSerializer
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import logout
 from django.contrib.auth import authenticate
@@ -18,13 +18,13 @@ from django.conf import settings
 
 class UserRegisterView(APIView):
     def post(self, request):
-        ser_data = UserRegiterSerializer(data=request.data)
+        ser_data = UserRegisterSerializer(data=request.data)
         if ser_data.is_valid():
-            User.objects.creat_user(
+            User.objects.create_user(
                 email = ser_data.validated_data['email'],
                 phone_number= ser_data.validated_data['phone_number'],
                 full_name = ser_data.validated_data['full_name'],
-                password = ser_data.validated_data['passwoed1'],
+                password = ser_data.validated_data['password'],
             )
             return Response(ser_data.data, status=status.HTTP_201_CREATED)
         return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)

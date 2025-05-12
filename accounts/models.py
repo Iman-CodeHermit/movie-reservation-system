@@ -26,6 +26,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     def is_staff(self):
         return self.is_admin
 
+    def has_perm(self, perm, obj = None):
+        return True
+
+    def has_module_perms(self, app_label):
+        return True
+
 class PasswordResetCode(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     code = models.CharField(max_length=5)

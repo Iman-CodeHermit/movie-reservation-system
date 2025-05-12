@@ -4,5 +4,7 @@ from .models import Director, Actor, Movie, Comment
 
 admin.site.register(Director)
 admin.site.register(Actor)
-admin.site.register(Movie)
+class MovieAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title')  # نمایش آیدی و فیلدهای دیگه
+admin.site.register(Movie, MovieAdmin)
 admin.site.register(Comment)
