@@ -1,0 +1,33 @@
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - main
+    ports:
+      "5432:5432"
+    restart: on-failure
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    app:
+      build: .
+      command: "python manage.py migrate && gunicorn a.wsgi -b 0.0.0.0:8000"
+      container_name: app
+      volumes:
+        - .:/src/
+      depends_on:
+        - postgres
+      networks:
+        - main
+      restart: on-failure
+
+networks:
+  main
+
+volumes:
+  postgres_data
