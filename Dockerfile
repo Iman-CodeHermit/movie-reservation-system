@@ -4,8 +4,8 @@ WORKDIR /src
 
 COPY requirements.txt /src/
 
-RUN pip install -u pip
-RUN install -r requirements.txt
+RUN pip install -U pip
+RUN pip install -r requirements.txt
 
 COPY . /src/
 

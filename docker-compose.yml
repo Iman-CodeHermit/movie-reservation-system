@@ -9,25 +9,25 @@ services:
     networks:
       - main
     ports:
-      "5432:5432"
+      - "5432:5432"
     restart: on-failure
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-    app:
-      build: .
-      command: "python manage.py migrate && gunicorn a.wsgi -b 0.0.0.0:8000"
-      container_name: app
-      volumes:
-        - .:/src/
-      depends_on:
-        - postgres
-      networks:
-        - main
-      restart: on-failure
+  app:
+    build: .
+    command: "python manage.py migrate && gunicorn a.wsgi -b 0.0.0.0:8000"
+    container_name: app
+    volumes:
+      - .:/src/
+    depends_on:
+      - postgres
+    networks:
+      - main
+    restart: on-failure
 
 networks:
-  main
+  main:
 
 volumes:
-  postgres_data
+  postgres_data:
